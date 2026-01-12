@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CampusCare Dashboard</title>
+  <link rel="stylesheet" href="dashboard1.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">
+    <img src="img3.png" alt="MindMates Logo" class="brand-icon">
+    <span class="brand-name">MindMates</span>
+  </div>
+  <div class="profile">
+    <span>Dr. Sarah Johnson</span>
+    <button class="logout">Logout</button>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="welcome">Welcome, Dr. Johnson</h1>
+  <p class="subtitle">You have 3 appointments today</p>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="card stat"><h3>3</h3><p>Today's Sessions</p></div>
+    <div class="card stat"><h3>3</h3><p>Upcoming</p></div>
+    <div class="card stat"><h3>24</h3><p>Completed</p></div>
+    <div class="card stat"><h3>18</h3><p>Active Patients</p></div>
+  </section>
+
+  <div class="grid">
+
+    <!-- LEFT COLUMN -->
+    <div class="column">
+
+      <!-- Today's Appointments -->
+      <div class="card today-card">
+        <h2>Today's Appointments</h2>
+
+        <div class="appointment">
+          <div>
+            <strong>Anonymous User</strong>
+            <span>10:00 AM</span>
+          </div>
+          <button class="btn green">Chat</button>
+        </div>
+
+        <div class="appointment">
+          <div>
+            <strong>John Smith</strong>
+            <span>11:30 AM</span>
+          </div>
+          <div class="actions">
+            <button class="btn purple">Video Call</button>
+            <button class="btn purple">Chat</button>
+            <button class="btn icon">📄</button>
+          </div>
+        </div>
+
+        <div class="appointment">
+          <div>
+            <strong>Anonymous User</strong>
+            <span>2:00 PM</span>
+          </div>
+          <button class="btn purple">Chat</button>
+        </div>
+      </div>
+
+      <!-- Upcoming Appointments -->
+      <div class="card upcoming-card">
+        <h2>Upcoming Appointments</h2>
+
+        <div class="appointment">
+          <div>
+            <strong>Sarah Williams</strong>
+            <span>Jan 10, 2026 · 9:00 AM</span>
+          </div>
+          <div class="actions">
+            <button class="btn green">Accept</button>
+            <button class="btn gray">Reschedule</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="column">
+
+      <!-- Emergency FIRST -->
+      <div class="card gradient">
+        <h2>🚨 Emergency Help</h2>
+        <p class="space">If you're in crisis, we're here 24/7</p>
+        <button class="btn full dark">Emergency Call</button>
+      </div>
+
+      <!-- Availability BELOW -->
+      <div class="card">
+        <h2>Availability Status</h2>
+        <div class="status available">● Available</div>
+        <button class="btn full gray" onclick="toggleStatus()">Set as Busy</button>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+let available = true;
+function toggleStatus() {
+  available = !available;
+  const status = document.querySelector(".status");
+  const button = document.querySelector(".gray");
+
+  if (available) {
+    status.textContent = "● Available";
+    status.className = "status available";
+    button.textContent = "Set as Busy";
+  } else {
+    status.textContent = "● Busy";
+    status.className = "status";
+    status.style.background = "#fee2e2";
+    status.style.color = "#991b1b";
+    button.textContent = "Set as Available";
+  }
+}
+</script>
+
+</body>
+</html>
