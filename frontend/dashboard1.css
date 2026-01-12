@@ -251,3 +251,11 @@ body {
     grid-template-columns: 1fr;
   }
 }
+.hospital-select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #a7f3d0;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
