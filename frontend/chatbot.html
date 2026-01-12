@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MindMates – Mental Health Support</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="chatbot.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">
+      <img src="img3.png" alt="MindMates Logo" class="brand-icon">
+      <span class="brand-name">MindMates</span>
+    </div>
+  </header>
+
+  <!-- Welcome Section -->
+  <section class="welcome">
+    <h2>Your AI Mental Health Companion</h2>
+    <p>Confidential • Supportive • Always Available</p>
+  </section>
+
+  <!-- About Card -->
+  <section class="card">
+    <h3>About MindMates</h3>
+    <p>
+      MindMates provides confidential mental health support using
+      AI-powered conversations. You can talk freely, anytime,
+      without judgment, and receive guidance tailored to you.
+    </p>
+  </section>
+
+  <!-- Chat Hint -->
+  <div class="chat-hint">
+    💬 Click here to chat with our AI counsellor
+  </div>
+
+  <!-- Dialogflow Messenger -->
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+  <df-messenger
+    intent="WELCOME"
+    chat-title="MindMates"
+    agent-id="6a2eb1d8-4686-4ecc-bedb-855bd051a3ec"
+    language-code="en">
+  </df-messenger>
+
+</body>
+</html>
