@@ -1,0 +1,160 @@
+/* Reset */
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at top right, #5fffd6 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #4cc790 0%, transparent 45%),
+        linear-gradient(135deg, #063f44, #0f766e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 320px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Card */
+.card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Card Title */
+.card h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 22px;
+    color: #064e3b;
+}
+
+/* Roles */
+.role-selection {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.role {
+    flex: 1;
+    margin: 0 3px;
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid #a7f3d0;
+    background: #ecfdf5;
+    cursor: pointer;
+    color: #065f46;
+    font-size: 12px;
+    transition: 0.2s;
+}
+
+.role.active {
+    background: linear-gradient(135deg, #34ffd2, #22c55e);
+    color: white;
+    border: none;
+}
+
+/* Input Fields */
+.input-group {
+    margin-bottom: 12px;
+}
+
+.input-group label {
+    font-size: 12px;
+    color: #065f46;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #a7f3d0;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 5px rgba(34,197,94,0.4);
+}
+
+/* Buttons */
+.login-btn, .anonymous-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: 0.2s;
+}
+
+.login-btn {
+    border: none;
+    background: linear-gradient(135deg, #34ffd2, #22c55e);
+    color: white;
+    box-shadow: 0 6px 15px rgba(34,197,94,0.4);
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+}
+
+.anonymous-btn {
+    border: 2px solid #34ffd2;
+    background: transparent;
+    color: #047857;
+    font-weight: 600;
+}
+
+.anonymous-btn:hover {
+    background: #34ffd2;
+    color: white;
+}
+
+/* Divider */
+.divider {
+    text-align: center;
+    margin: 10px 0;
+    color: #6b7280;
+}
+
+/* Signup link */
+.signup {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.signup a {
+    color: #22c55e;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup a:hover {
+    text-decoration: underline;
+}
