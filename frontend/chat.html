@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat | CampusCare</title>
+    <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+
+<div class="chat-container">
+
+    <!-- Header -->
+    <div class="chat-header">
+        <div class="left">
+            ←
+            <div class="avatar">👤</div>
+            <div>
+                <h4>Dr. Sarah Johnson</h4>
+                <span class="online">● Online</span>
+            </div>
+        </div>
+
+        <div class="right">
+            📹 📞 ⋮
+        </div>
+    </div>
+
+    <div class="security">
+        🔒 This conversation is confidential and encrypted
+    </div>
+
+    <!-- Messages -->
+    <div class="messages" id="messages">
+
+        <div class="message received">
+            Hello! I'm here to help. How are you feeling today?
+            <span class="time">10:30 AM</span>
+        </div>
+
+        <div class="message sent">
+            Hi, I’ve been feeling really stressed about my exams.
+            <span class="time">10:31 AM</span>
+        </div>
+
+        <div class="message received">
+            I understand exam stress can be overwhelming. Can you tell me more about what specifically is worrying you?
+            <span class="time">10:32 AM</span>
+        </div>
+
+        <div class="message sent">
+            I just feel like I’m not prepared enough and I keep procrastinating.
+            <span class="time">10:33 AM</span>
+        </div>
+
+        <div class="message received">
+            That’s a very common feeling, and you’re not alone. Let’s work through some strategies together.
+            <span class="time">10:34 AM</span>
+        </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input">
+        📎
+        <input type="text" id="input" placeholder="Type your message...">
+        😊
+        <button onclick="sendMessage()">➤</button>
+    </div>
+
+</div>
+
+<script>function sendMessage() {
+    const input = document.getElementById("input");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const msg = document.createElement("div");
+    msg.className = "message sent";
+    msg.innerHTML = ${text}<span class="time">Now</span>;
+
+    document.getElementById("messages").appendChild(msg);
+    input.value = "";
+    document.getElementById("messages").scrollTop =
+        document.getElementById("messages").scrollHeight;
+}
+</script>
+</body>
+</html>
