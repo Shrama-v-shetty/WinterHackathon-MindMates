@@ -4,7 +4,13 @@
   <meta charset="UTF-8" />
   <title>CampusCare Dashboard</title>
   <link rel="stylesheet" href="dashboard1.css" />
+
+  <!-- Firebase (only needed if video call uses it) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
+
 <body>
 
 <header class="topbar">
@@ -32,10 +38,9 @@
 
   <div class="grid">
 
-    <!-- LEFT COLUMN -->
+    <!-- LEFT -->
     <div class="column">
 
-      <!-- Today's Appointments -->
       <div class="card today-card">
         <h2>Today's Appointments</h2>
 
@@ -53,22 +58,13 @@
             <span>11:30 AM</span>
           </div>
           <div class="actions">
-           <button class="btn purple" onclick="startVideoCall()">Video Call</button>
+            <button class="btn purple" onclick="startVideoCall()">Video Call</button>
             <button class="btn purple" onclick="openChat()">Chat</button>
             <button class="btn icon" onclick="openNote()">📄</button>
           </div>
         </div>
-
-        <div class="appointment">
-          <div>
-            <strong>Anonymous User</strong>
-            <span>2:00 PM</span>
-          </div>
-          <button class="btn purple" onclick="openChat()">Chat</button>
-        </div>
       </div>
 
-      <!-- Upcoming Appointments -->
       <div class="card upcoming-card">
         <h2>Upcoming Appointments</h2>
 
@@ -78,132 +74,124 @@
             <span>Jan 10, 2026 · 9:00 AM</span>
           </div>
           <div class="actions">
-           <button class="btn green" onclick="markAccepted(this)">Accept</button>
+            <button class="btn green" onclick="markAccepted(this)">Accept</button>
             <button class="btn gray" onclick="rescheduleAppointment(this)">Reschedule</button>
           </div>
         </div>
-
       </div>
-
     </div>
 
-    <!-- RIGHT COLUMN -->
+    <!-- RIGHT -->
     <div class="column">
 
-      <!-- Emergency FIRST -->
       <div class="card gradient">
         <h2>🚨 Emergency Help</h2>
-        <p class="space">If you're in crisis, we're here 24/7</p>
-        <button class="btn full dark">Emergency Call</button>
+        <p class="space"><p class="space">
+  Help patients reach emergency medical care without delay
+</p></p>
+   <select id="hospitalSelect" class="btn full white">
+  <option value="">Select Counselling Centre</option>
+
+  <option value="https://maps.google.com/?q=Prajna+Counselling+Centre+Falnir+Rd">
+    Prajna Counselling Centre – Falnir Rd
+  </option>
+
+  <option value="https://maps.google.com/?q=You+Matter+Counselling+and+Training+Centre+Milagres">
+    You Matter – Counselling & Training Centre
+  </option>
+
+  <option value="https://maps.google.com/?q=Psychological+Counselling+Centre+Gandhinagar+Mangalore">
+    Counselling Centre – Gandhinagar
+  </option>
+
+  <option value="https://maps.google.com/?q=KMC+Hospital+Mangalore">
+  KMC Hospital
+</option>
+
+<option value="https://maps.google.com/?q=Manipal+Hospital">
+  Manipal Hospital
+</option>
+
+<option value="https://maps.google.com/?q=Father+Muller+Hospital+Mangalore">
+  Father Muller Hospital
+</option>
+
+</select>
+
+
+<button class="btn full green" onclick="sendHospital()">
+  Send Hospital Location
+</button>
+
       </div>
 
-      <!-- Availability BELOW -->
-     <div class="card">
-  <h2>Availability Status</h2>
+      <div class="card">
+        <h2>Availability Status</h2>
 
-  <div id="availabilityStatus" class="status available">
-    ● Available
-  </div>
+        <div id="availabilityStatus" class="status available">● Available</div>
 
-  <button
-    id="availabilityBtn"
-    class="btn full gray"
-    onclick="toggleStatus()">
-    Set as Busy
-  </button>
-</div>
-
-
+        <button id="availabilityBtn" class="btn full gray" onclick="toggleStatus()">
+          Set as Busy
+        </button>
+      </div>
     </div>
+
   </div>
 </main>
 
 <script>
-let isAvailable = true; // initial state = Available
+let isAvailable = true;
 
 function toggleStatus() {
   const status = document.getElementById("availabilityStatus");
   const button = document.getElementById("availabilityBtn");
 
   if (isAvailable) {
-    // Available → Busy
     status.textContent = "● Busy";
     status.className = "status busy";
     button.textContent = "Set as Available";
   } else {
-    // Busy → Available
     status.textContent = "● Available";
     status.className = "status available";
     button.textContent = "Set as Busy";
   }
-
   isAvailable = !isAvailable;
 }
 
+function openLogin(){ window.location.href = "index.html"; }
+function openChat(){ window.location.href = "chat.html"; }
+function openNote(){ window.location.href = "notes.html"; }
 
-function openLogin(){
-   window.location.href = "index.html";
-}
-function openChat(){
-  window.location.href = "chat.html";
-}
-function openNote(){
-  window.location.href = "notes.html";
-}
-function markAccepted(button) {
-  button.textContent = "Accepted";
-  button.disabled = true;
-  button.style.background = "#16a34a";   // darker green
-  button.style.cursor = "default";
+function markAccepted(btn) {
+  btn.textContent = "Accepted";
+  btn.disabled = true;
+  btn.style.background = "#16a34a";
 }
 
-function rescheduleAppointment(button) {
-    const appointmentDiv = button.closest(".appointment");
-    const studentName = appointmentDiv.querySelector("strong").textContent;
-
-    // Open Google Calendar's "create event" page in a new tab
-    const url = new URL("https://calendar.google.com/calendar/r/eventedit");
-    url.searchParams.set("text", `Appointment with ${studentName}`);
-    url.searchParams.set("details", "Rescheduled session");
-    // Optional: pre-fill date in ISO format
-    // url.searchParams.set("dates", "20260112T110000/20260112T120000"); 
-
-    window.open(url.toString(), "_blank");
-
-    button.textContent = "Reschedule via Google Calendar";
-    button.disabled = true;
-    button.style.background = "#f59e0b";
-    button.style.cursor = "default";
+function rescheduleAppointment(btn) {
+  const name = btn.closest(".appointment").querySelector("strong").textContent;
+  const url = new URL("https://calendar.google.com/calendar/r/eventedit");
+  url.searchParams.set("text", `Appointment with ${name}`);
+  window.open(url, "_blank");
 }
-// Assuming Firebase Auth & Firestore are initialized
-const auth = firebase.auth();
-const db = firebase.firestore();
 
+/* Firebase video call (works only if Firebase configured) */
 function startVideoCall() {
-  const user = auth.currentUser; // Logged-in counselor
-  if (!user) {
-    alert("Please log in first.");
+  alert("Google Meet link will open if Firebase is connected.");
+}
+function sendHospital() {
+  const hospitalLink = document.getElementById("hospitalSelect").value;
+
+  if (!hospitalLink) {
+    alert("Please select a hospital");
     return;
   }
 
-  // Fetch the Meet link from Firestore
-  db.collection("users").doc(user.uid).get()
-    .then(doc => {
-      if (doc.exists) {
-        const meetLink = doc.data().meetLink;
-        if (meetLink) {
-          window.open(meetLink, "_blank"); // Open in new tab
-        } else {
-          alert("No Google Meet link found. Please set it in your profile.");
-        }
-      } else {
-        alert("User data not found.");
-      }
-    })
-    .catch(error => console.error(error));
+  // For demo: open link (represents sending to patient)
+  window.open(hospitalLink, "_blank");
+
+  alert("Hospital location sent to patient successfully");
 }
-
-
 
 </script>
 
