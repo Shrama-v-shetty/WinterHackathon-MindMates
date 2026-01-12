@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CampusCare Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <div class="logo">
+       <div class="image"> <img src="img3.png" alt="MindMates Logo" class="brand-icon"></div>
+
+                <span class="brand-name">MindMates</span></div>
+    
+</header>
+
+<!-- Welcome Section -->
+<section class="welcome">
+    <h2>Welcome back!</h2>
+    <p>Your mental well-being matters. Choose how we can help.</p>
+</section>
+
+<!-- Main Actions -->
+<section class="actions">
+
+    <!-- AI Chatbot -->
+    <div class="action-card violet" onclick="openAIChat()">
+        🤖
+        <h4>AI Chatbot</h4>
+        <p>24/7 mental health support</p>
+    </div>
+
+    <!-- Chat with Counsellor -->
+    <div class="action-card green" onclick="openCounsellorChat()">
+        💬
+        <h4>Chat with Counsellor</h4>
+        <p>Talk to a professional</p>
+    </div>
+
+    
+
+</section>
+
+<!-- Emergency Section -->
+<section class="emergency">
+    <h3>🚨 Emergency Support</h3>
+    <p>If you feel unsafe or overwhelmed, get immediate help.</p>
+    <div class="hospital">
+    <button class="btn dark" onclick="openHospitals()">Nearby Hospitals</button></div>
+</section>
+
+<script>
+console.log("CampusCare Dashboard Loaded");
+
+// Redirects
+function openAIChat() {
+    window.location.href = "chatbot.html";
+}
+
+function openCounsellorChat() {
+    window.location.href = "chat1.html";
+}
+
+function openEmergency() {
+    alert("If this is a life-threatening emergency, please call local emergency services immediately.");
+}
+
+function callEmergency() {
+    alert("Calling emergency helpline...");
+}
+
+function openHospitals() {
+    alert("Showing nearby hospitals...");
+}
+</script>
+
+</body>
+</html>
