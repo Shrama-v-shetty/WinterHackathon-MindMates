@@ -55,6 +55,16 @@
 
             <!-- Login Button -->
             <button class="login-btn" onclick="login()">Login</button>
+            <div class="forgot-password">
+               <a onclick="forgotPassword()">Forgot password?</a>
+            </div>
+
+            <!-- Google Login Button --> 
+            <button class="google-btn" onclick="loginWithGoogle()">
+              <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+              Continue with Google
+            </button>
+
 
             <div class="divider">or</div>
 
@@ -101,7 +111,8 @@ function login() {
         return;
     }
 
-    auth.signInWithEmailAndPassword(email, password)
+    auth.signInWithEmail
+    AndPassword(email, password)
         .then(userCredential => {
             const uid = userCredential.user.uid;
 
@@ -121,6 +132,23 @@ function login() {
                 });
         })
         .catch(err => alert(err.message));
+}
+
+function forgotPassword() {
+    const email = document.getElementById("email").value;
+
+    if (!email) {
+        alert("Please enter your email first");
+        return;
+    }
+
+    auth.sendPasswordResetEmail(email)
+        .then(() => {
+            alert("Password reset link has been sent to your email");
+        })
+        .catch(error => {
+            alert(error.message);
+        });
 }
 
 function goAnonymous() {

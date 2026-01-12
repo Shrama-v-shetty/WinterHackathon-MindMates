@@ -158,3 +158,54 @@ body {
 .signup a:hover {
     text-decoration: underline;
 }
+.google-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    background: white;
+    color: #444;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.google-btn:hover {
+    background: #f1f1f1;
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+
+.google-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    background: #fff;
+    color: #444;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.google-btn img {
+    width: 18px;
+    height: 18px;
+}
+
+.google-btn:hover {
+    background: #f7f7f7;
+}
