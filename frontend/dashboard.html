@@ -74,8 +74,8 @@
             <p>Academic Stress</p>
         </div>
         <div class="buttons">
-            <button class="btn blue">Book</button>
-            <button class="btn green">Chat</button>
+            <button class="btn blue" onclick="openModal()">Book</button>
+            <button class="btn green" onclick="openChat()">Chat</button>
         </div>
     </div>
 
@@ -85,8 +85,8 @@
             <p>Anxiety & Depression</p>
         </div>
         <div class="buttons">
-            <button class="btn blue">Book</button>
-            <button class="btn green">Chat</button>
+            <button class="btn blue" onclick="openModal()">Book</button>
+            <button class="btn green" onclick="openChat()">Chat</button>
         </div>
     </div>
 
@@ -96,8 +96,8 @@
             <p>Relationship Issues</p>
         </div>
         <div class="buttons">
-            <button class="btn blue">Book</button>
-            <button class="btn green">Chat</button>
+            <button class="btn blue" onclick="openModal()">Book</button>
+            <button class="btn green" onclick="openChat()">Chat</button>
         </div>
     </div>
 
@@ -107,8 +107,8 @@
             <p>Career Counselling</p>
         </div>
         <div class="buttons">
-            <button class="btn blue">Book</button>
-            <button class="btn green">Chat</button>
+            <button class="btn blue" onclick="openModal()">Book</button>
+            <button class="btn green" onclick="openChat()">Chat</button>
         </div>
     </div>
 </section>
@@ -151,10 +151,10 @@
             <label>Session Type</label>
             <div class="session-type">
                 <button class="session active">Video Call</button>
-                <button class="session">Chat</button>
+                <button class="session" >Chat</button>
             </div>
 
-            <button class="confirm-btn">Confirm Booking</button>
+            <button class="confirm-btn" onclick="AlertConfirm()">Confirm Booking</button>
         </div>
     </div>
 </div>
@@ -189,7 +189,9 @@ function openVideo(){
 function openChatbot(){
       window.location.href = "chatbot.html";
 }
-
+function AlertConfirm(){
+    alert("✅ Appointment booking request has been sent successfully!");
+}
 </script>
 </body>
 </html>
