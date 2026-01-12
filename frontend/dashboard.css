@@ -318,7 +318,7 @@ body {
     padding: 8px 16px;
     border-radius: 12px;
     border: none;
-    background: #165b2f;       /* green like dashboard */
+    background: #0c5c4b;              /* green like dashboard */
     color: white;
     font-size: 13px;
     font-weight: 600;
@@ -327,6 +327,6 @@ body {
 }
 
 .btn-green-dark:hover {
-    background: #34ffd2;       /* lighter green on hover */
+    background:  #166e36;      /* lighter green on hover */
     transform: translateY(-2px);
 }
