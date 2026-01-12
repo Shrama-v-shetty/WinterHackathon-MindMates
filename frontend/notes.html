@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Counselling Notes</title>
+  <link rel="stylesheet" href="notes.css" />
+</head>
+<body>
+
+<!-- Modal Overlay -->
+<div class="modal-overlay" id="notesModal">
+  <div class="modal">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <h2>Counselling Notes</h2>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+      <div class="privacy-box">
+        <strong>Privacy Notice:</strong>
+        These notes are confidential and encrypted. Only you can access them.
+      </div>
+
+      <div class="form-group">
+        <label>Session Date</label>
+        <input type="date" value="2026-01-08">
+      </div>
+
+      <div class="form-group">
+        <label>Student / Patient ID</label>
+        <input type="text" placeholder="Anonymous or Patient ID">
+      </div>
+
+      <div class="form-group">
+        <label>Session Notes</label>
+        <textarea rows="6" placeholder="Write your confidential notes here..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Recommendations</label>
+        <textarea rows="4" placeholder="Suggested actions, resources, or follow-up plans..."></textarea>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn primary" onclick="AlertSave()">Save Notes</button>
+      <button class="btn secondary" onclick="closeModal()">Cancel</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* Auto open modal when page loads */
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("notesModal").style.display = "flex";
+});
+
+function closeModal() {
+   window.location.href = "dashboard1.html";
+}
+
+/* Close modal when clicking outside */
+window.addEventListener("click", function (e) {
+  const modal = document.getElementById("notesModal");
+  if (e.target === modal) {
+    closeModal();
+  }
+});
+function AlertSave(){
+    alert("Notes is successfully saved")
+}
+</script>
+
+</body>
+</html>

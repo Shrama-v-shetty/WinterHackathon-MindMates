@@ -14,7 +14,7 @@
   </div>
   <div class="profile">
     <span>Dr. Sarah Johnson</span>
-    <button class="logout">Logout</button>
+    <button class="logout" onclick="openLogin()">Logout</button>
   </div>
 </header>
 
@@ -44,7 +44,7 @@
             <strong>Anonymous User</strong>
             <span>10:00 AM</span>
           </div>
-          <button class="btn green">Chat</button>
+          <button class="btn green" onclick="openChat()">Chat</button>
         </div>
 
         <div class="appointment">
@@ -54,8 +54,8 @@
           </div>
           <div class="actions">
             <button class="btn purple">Video Call</button>
-            <button class="btn purple">Chat</button>
-            <button class="btn icon">📄</button>
+            <button class="btn purple" onclick="openChat()">Chat</button>
+            <button class="btn icon" onclick="openNote()">📄</button>
           </div>
         </div>
 
@@ -64,7 +64,7 @@
             <strong>Anonymous User</strong>
             <span>2:00 PM</span>
           </div>
-          <button class="btn purple">Chat</button>
+          <button class="btn purple" onclick="openChat()">Chat</button>
         </div>
       </div>
 
@@ -78,8 +78,8 @@
             <span>Jan 10, 2026 · 9:00 AM</span>
           </div>
           <div class="actions">
-            <button class="btn green">Accept</button>
-            <button class="btn gray">Reschedule</button>
+           <button class="btn green" onclick="markAccepted(this)">Accept</button>
+            <button class="btn gray" onclick="rescheduleAppointment(this)">Reschedule</button>
           </div>
         </div>
 
@@ -98,35 +98,85 @@
       </div>
 
       <!-- Availability BELOW -->
-      <div class="card">
-        <h2>Availability Status</h2>
-        <div class="status available">● Available</div>
-        <button class="btn full gray" onclick="toggleStatus()">Set as Busy</button>
-      </div>
+     <div class="card">
+  <h2>Availability Status</h2>
+
+  <div id="availabilityStatus" class="status available">
+    ● Available
+  </div>
+
+  <button
+    id="availabilityBtn"
+    class="btn full gray"
+    onclick="toggleStatus()">
+    Set as Busy
+  </button>
+</div>
+
 
     </div>
   </div>
 </main>
 
 <script>
-let available = true;
-function toggleStatus() {
-  available = !available;
-  const status = document.querySelector(".status");
-  const button = document.querySelector(".gray");
+let isAvailable = true; // initial state = Available
 
-  if (available) {
+function toggleStatus() {
+  const status = document.getElementById("availabilityStatus");
+  const button = document.getElementById("availabilityBtn");
+
+  if (isAvailable) {
+    // Available → Busy
+    status.textContent = "● Busy";
+    status.className = "status busy";
+    button.textContent = "Set as Available";
+  } else {
+    // Busy → Available
     status.textContent = "● Available";
     status.className = "status available";
     button.textContent = "Set as Busy";
-  } else {
-    status.textContent = "● Busy";
-    status.className = "status";
-    status.style.background = "#fee2e2";
-    status.style.color = "#991b1b";
-    button.textContent = "Set as Available";
   }
+
+  isAvailable = !isAvailable;
 }
+
+
+function openLogin(){
+   window.location.href = "index.html";
+}
+function openChat(){
+  window.location.href = "chat.html";
+}
+function openNote(){
+  window.location.href = "notes.html";
+}
+function markAccepted(button) {
+  button.textContent = "Accepted";
+  button.disabled = true;
+  button.style.background = "#16a34a";   // darker green
+  button.style.cursor = "default";
+}
+
+function rescheduleAppointment(button) {
+    const appointmentDiv = button.closest(".appointment");
+    const studentName = appointmentDiv.querySelector("strong").textContent;
+
+    // Open Google Calendar's "create event" page in a new tab
+    const url = new URL("https://calendar.google.com/calendar/r/eventedit");
+    url.searchParams.set("text", `Appointment with ${studentName}`);
+    url.searchParams.set("details", "Rescheduled session");
+    // Optional: pre-fill date in ISO format
+    // url.searchParams.set("dates", "20260112T110000/20260112T120000"); 
+
+    window.open(url.toString(), "_blank");
+
+    button.textContent = "Reschedule via Google Calendar";
+    button.disabled = true;
+    button.style.background = "#f59e0b";
+    button.style.cursor = "default";
+}
+
+
 </script>
 
 </body>
