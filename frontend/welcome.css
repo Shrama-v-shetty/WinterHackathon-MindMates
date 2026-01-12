@@ -1,0 +1,191 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top right,  #4cc790 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #4cc790 0%, transparent 45%),
+        linear-gradient(135deg, #063f44, #0f766e);
+    color: #ecfdf5;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 40px;
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    width: 64px;   /* increased logo size */
+}
+
+
+.brand-name {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ecfdf5;
+    font-weight: 500;
+}
+
+.nav-cta {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #34ffd2, #22c55e);
+    color: #064e3b !important;
+}
+
+/* Hero */
+.hero {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    padding: 80px 40px;
+    align-items: center;
+}
+
+.hero-text h1 {
+    font-size: 46px;
+    line-height: 1.2;
+    margin-bottom: 18px;
+}
+
+.hero-text p {
+    font-size: 16px;
+    color: #d1fae5;
+    margin-bottom: 28px;
+}
+
+.hero-visual {
+    position: relative;
+}
+
+
+
+/* Buttons */
+.btn {
+    padding: 12px 26px;
+    border-radius: 20px;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn.primary {
+    background: linear-gradient(135deg, #34ffd2, #22c55e);
+    color: #064e3b;
+}
+
+.btn.large {
+    padding: 14px 32px;
+    font-size: 16px;
+}
+
+/* Intro */
+.intro {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.intro-card {
+    background: rgba(255,255,255,0.9);
+    color: #064e3b;
+    border-radius: 26px;
+    padding: 35px;
+    text-align: center;
+    max-width: 600px;
+}
+
+.intro-card img {
+    width: 110px;  /* larger logo in intro section */
+    margin-bottom: 12px;
+}
+
+
+.tagline {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.intro-text {
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* About */
+.about {
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.about h2 {
+    margin-bottom: 35px;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.about-card {
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(12px);
+    padding: 26px;
+    border-radius: 22px;
+}
+
+.about-card h3 {
+    margin-bottom: 10px;
+}
+
+.about-card p {
+    font-size: 14px;
+    color: #d1fae5;
+}
+
+/* CTA */
+.cta-section {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.cta-section p {
+    margin: 12px 0 22px;
+    color: #d1fae5;
+}
+.brand-icon {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 25px;
+  font-weight: 700;
+  color: #ffffff;
+}
