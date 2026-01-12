@@ -1,125 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>CampusCare | Sign Up</title>
-    <link rel="stylesheet" href="style2.css">
+  <meta charset="UTF-8">
+  <title>MindMates | Sign Up</title>
+
+  <link rel="stylesheet" href="style2.css">
+  <script type="module" src="login.js" defer></script>
 </head>
+
 <body>
-
 <div class="container">
-    <div class="card">
-        <h2>Create Account</h2>
+  <div class="card">
+    <h2>Create Account</h2>
 
-        <!-- Role Selection -->
-        <div class="role-selection">
-            <button class="role active" onclick="selectRole(this)">Student</button>
-            <button class="role" onclick="selectRole(this)">Teacher</button>
-            <button class="role" onclick="selectRole(this)">Counselor</button>
-        </div>
-
-        <!-- Input Fields -->
-        <div class="input-group">
-            <label>Full Name</label>
-            <input type="text" id="name" placeholder="Enter your name">
-        </div>
-
-        <div class="input-group">
-            <label>Email</label>
-            <input type="email" id="email" placeholder="Enter your email">
-        </div>
-
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" id="password" placeholder="Enter your password">
-        </div>
-
-        <div class="input-group">
-            <label>Confirm Password</label>
-            <input type="password" id="confirmPassword" placeholder="Confirm your password">
-        </div>
-
-        <!-- Sign Up Button -->
-        <button class="login-btn" onclick="signup()">Sign Up</button>
-
-        <!-- Google Sign Up -->
-        <button class="google-btn" onclick="loginWithGoogle()">
-              <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
-              Continue with Google
-            </button>
-
-        
-
-        <!-- Already have an account -->
-        <p class="signup">
-            Already have an account? <a href="index.html">Login</a>
-        </p>
-
-        <div class="divider">or</div>
-
-        <!-- Continue Anonymously -->
-        <button class="anonymous-btn" onclick="goAnonymous()">Continue Anonymously</button>
+    <div class="role-selection">
+      <button class="role active">Student</button>
+      <button class="role">Teacher</button>
+      <button class="role">Counselor</button>
     </div>
+
+    <div class="input-group">
+      <label>Full Name</label>
+      <input type="text" id="name">
+    </div>
+
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" id="email">
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" id="password">
+    </div>
+
+    <div class="input-group">
+      <label>Confirm Password</label>
+      <input type="password" id="confirmPassword">
+    </div>
+
+    <button class="login-btn" id="signupBtn">Sign Up</button>
+
+    <div class="divider">or</div>
+
+    <button class="anonymous-btn" id="anonBtn">Continue Anonymously</button>
+
+    <p class="signup">
+      Already have an account? <a href="index.html">Login</a>
+    </p>
+  </div>
 </div>
-
-<script>
-let selectedRole = "Student";
-
-function selectRole(button) {
-    document.querySelectorAll(".role").forEach(btn => btn.classList.remove("active"));
-    button.classList.add("active");
-    selectedRole = button.innerText;
-}
-
-function signup() {
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-
-    if (!name || !email || !password || !confirmPassword) {
-        alert("Please fill all fields");
-        return;
-    }
-
-    if (password !== confirmPassword) {
-        alert("Passwords do not match");
-        return;
-    }
-
-    alert(
-        `Account Created!\n` +
-        `Role: ${selectedRole}\n` +
-        `Name: ${name}\n` +
-        `Email: ${email}`
-    );
-}
-
-// Continue anonymously
-function goAnonymous() {
-    window.location.href = "dashboard2.html";
-}
-
-// Google Sign Up
-function signupWithGoogle() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider)
-        .then(() => {
-            alert("Signed up with Google!");
-            window.location.href = "dashboard2.html";
-        })
-        .catch(err => alert(err.message));
-}
-
-// Forgot Password
-function forgotPassword() {
-    const email = prompt("Enter your email to reset password:");
-    if (!email) return;
-    firebase.auth().sendPasswordResetEmail(email)
-        .then(() => alert("Password reset email sent!"))
-        .catch(err => alert(err.message));
-}
-</script>
-
 </body>
 </html>
