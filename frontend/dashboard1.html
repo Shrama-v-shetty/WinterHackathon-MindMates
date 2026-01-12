@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>CampusCare Dashboard</title>
-  <link rel="stylesheet" href="dashboard1.css" />
+  <meta charset="UTF-8">
+  <title>MindMates | Counsellor Dashboard</title>
+  <link rel="stylesheet" href="dashboard1.css">
 
-  <!-- Firebase (only needed if video call uses it) -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -15,23 +15,23 @@
 
 <header class="topbar">
   <div class="logo">
-    <img src="img3.png" alt="MindMates Logo" class="brand-icon">
+    <img src="img3.png" class="brand-icon">
     <span class="brand-name">MindMates</span>
   </div>
   <div class="profile">
     <span>Dr. Sarah Johnson</span>
-    <button class="logout" onclick="openLogin()">Logout</button>
+    <button class="logout" onclick="logout()">Logout</button>
   </div>
 </header>
 
 <main class="container">
   <h1 class="welcome">Welcome, Dr. Johnson</h1>
-  <p class="subtitle">You have 3 appointments today</p>
+  <p class="subtitle" id="todayCount">You have 0 appointments today</p>
 
   <!-- Stats -->
   <section class="stats">
-    <div class="card stat"><h3>3</h3><p>Today's Sessions</p></div>
-    <div class="card stat"><h3>3</h3><p>Upcoming</p></div>
+    <div class="card stat"><h3 id="statToday">0</h3><p>Today's Sessions</p></div>
+    <div class="card stat"><h3 id="statUpcoming">0</h3><p>Upcoming</p></div>
     <div class="card stat"><h3>24</h3><p>Completed</p></div>
     <div class="card stat"><h3>18</h3><p>Active Patients</p></div>
   </section>
@@ -43,42 +43,14 @@
 
       <div class="card today-card">
         <h2>Today's Appointments</h2>
-
-        <div class="appointment">
-          <div>
-            <strong>Anonymous User</strong>
-            <span>10:00 AM</span>
-          </div>
-          <button class="btn green" onclick="openChat()">Chat</button>
-        </div>
-
-        <div class="appointment">
-          <div>
-            <strong>John Smith</strong>
-            <span>11:30 AM</span>
-          </div>
-          <div class="actions">
-            <button class="btn purple" onclick="startVideoCall()">Video Call</button>
-            <button class="btn purple" onclick="openChat()">Chat</button>
-            <button class="btn icon" onclick="openNote()">📄</button>
-          </div>
-        </div>
+        <div id="todayAppointments"></div>
       </div>
 
       <div class="card upcoming-card">
         <h2>Upcoming Appointments</h2>
-
-        <div class="appointment">
-          <div>
-            <strong>Sarah Williams</strong>
-            <span>Jan 10, 2026 · 9:00 AM</span>
-          </div>
-          <div class="actions">
-            <button class="btn green" onclick="markAccepted(this)">Accept</button>
-            <button class="btn gray" onclick="rescheduleAppointment(this)">Reschedule</button>
-          </div>
-        </div>
+        <div id="upcomingAppointments"></div>
       </div>
+
     </div>
 
     <!-- RIGHT -->
@@ -86,114 +58,136 @@
 
       <div class="card gradient">
         <h2>🚨 Emergency Help</h2>
-        <p class="space"><p class="space">
-  Help patients reach emergency medical care without delay
-</p></p>
-   <select id="hospitalSelect" class="btn full white">
-  <option value="">Select Counselling Centre</option>
+        <p>Help patients reach emergency care without delay</p>
 
-  <option value="https://maps.google.com/?q=Prajna+Counselling+Centre+Falnir+Rd">
-    Prajna Counselling Centre – Falnir Rd
-  </option>
+        <select id="hospitalSelect" class="btn full white">
+          <option value="">Select Hospital</option>
+          <option value="https://maps.google.com/?q=KMC+Hospital+Mangalore">KMC Hospital</option>
+          <option value="https://maps.google.com/?q=Father+Muller+Hospital">Father Muller Hospital</option>
+        </select>
 
-  <option value="https://maps.google.com/?q=You+Matter+Counselling+and+Training+Centre+Milagres">
-    You Matter – Counselling & Training Centre
-  </option>
-
-  <option value="https://maps.google.com/?q=Psychological+Counselling+Centre+Gandhinagar+Mangalore">
-    Counselling Centre – Gandhinagar
-  </option>
-
-  <option value="https://maps.google.com/?q=KMC+Hospital+Mangalore">
-  KMC Hospital
-</option>
-
-<option value="https://maps.google.com/?q=Manipal+Hospital">
-  Manipal Hospital
-</option>
-
-<option value="https://maps.google.com/?q=Father+Muller+Hospital+Mangalore">
-  Father Muller Hospital
-</option>
-
-</select>
-
-
-<button class="btn full green" onclick="sendHospital()">
-  Send Hospital Location
-</button>
-
+        <button class="btn full green" onclick="sendHospital()">Send Hospital Location</button>
       </div>
 
       <div class="card">
         <h2>Availability Status</h2>
-
         <div id="availabilityStatus" class="status available">● Available</div>
-
-        <button id="availabilityBtn" class="btn full gray" onclick="toggleStatus()">
-          Set as Busy
-        </button>
+        <button class="btn full gray" onclick="toggleStatus()">Set as Busy</button>
       </div>
-    </div>
 
+    </div>
   </div>
 </main>
 
+<!-- 🔥 FIREBASE CONFIG -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyC8C6ncKCm4cH0yhMZaPHzzS5GfbDZvp84",
+  authDomain: "mindmates-286b9.firebaseapp.com",
+  projectId: "mindmates-286b9",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  const COUNSELLOR_ID = "COUNSELLOR_001";
+</script>
+
+<!-- 🔥 LOGIC -->
 <script>
 let isAvailable = true;
 
 function toggleStatus() {
   const status = document.getElementById("availabilityStatus");
-  const button = document.getElementById("availabilityBtn");
-
-  if (isAvailable) {
-    status.textContent = "● Busy";
-    status.className = "status busy";
-    button.textContent = "Set as Available";
-  } else {
-    status.textContent = "● Available";
-    status.className = "status available";
-    button.textContent = "Set as Busy";
-  }
   isAvailable = !isAvailable;
+  status.textContent = isAvailable ? "● Available" : "● Busy";
+  status.className = "status " + (isAvailable ? "available" : "busy");
 }
 
-function openLogin(){ window.location.href = "index.html"; }
-function openChat(){ window.location.href = "chat.html"; }
-function openNote(){ window.location.href = "notes.html"; }
-
-function markAccepted(btn) {
-  btn.textContent = "Accepted";
-  btn.disabled = true;
-  btn.style.background = "#16a34a";
+function logout() {
+  auth.signOut().then(() => window.location.href = "login.html");
 }
 
-function rescheduleAppointment(btn) {
-  const name = btn.closest(".appointment").querySelector("strong").textContent;
-  const url = new URL("https://calendar.google.com/calendar/r/eventedit");
-  url.searchParams.set("text", `Appointment with ${name}`);
-  window.open(url, "_blank");
+function openChat() {
+  window.location.href = "chat.html";
 }
 
-/* Firebase video call (works only if Firebase configured) */
-function startVideoCall() {
-  alert("Google Meet link will open if Firebase is connected.");
-}
 function sendHospital() {
-  const hospitalLink = document.getElementById("hospitalSelect").value;
-
-  if (!hospitalLink) {
-    alert("Please select a hospital");
-    return;
-  }
-
-  // For demo: open link (represents sending to patient)
-  window.open(hospitalLink, "_blank");
-
-  alert("Hospital location sent to patient successfully");
+  const link = document.getElementById("hospitalSelect").value;
+  if (!link) return alert("Select a hospital");
+  window.open(link, "_blank");
 }
 
+/* 🔥 LOAD APPOINTMENTS */
+auth.onAuthStateChanged(user => {
+  if (!user) return;
+  loadAppointments();
+});
+
+function loadAppointments() {
+  const todayBox = document.getElementById("todayAppointments");
+  const upcomingBox = document.getElementById("upcomingAppointments");
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  let todayCount = 0;
+  let upcomingCount = 0;
+
+  db.collection("appointments")
+    .where("counsellorId", "==", COUNSELLOR_ID)
+    .onSnapshot(snapshot => {
+      todayBox.innerHTML = "";
+      upcomingBox.innerHTML = "";
+
+      snapshot.forEach(doc => {
+        const a = doc.data();
+        const d = a.date.toDate();
+        d.setHours(0,0,0,0);
+
+        const html = `
+          <div class="appointment">
+            <div>
+              <strong>${a.studentName}</strong>
+              <span>${a.time}</span>
+            </div>
+            <div class="actions">
+              ${a.status === "upcoming" ? `
+                <button class="btn green" onclick="acceptAppointment('${doc.id}')">Accept</button>
+              ` : `
+                <button class="btn purple" onclick="openChat()">Chat</button>
+              `}
+            </div>
+          </div>
+        `;
+
+        if (d.getTime() === today.getTime()) {
+          todayBox.innerHTML += html;
+          todayCount++;
+        } else if (d > today) {
+          upcomingBox.innerHTML += html;
+          upcomingCount++;
+        }
+      });
+
+      document.getElementById("statToday").textContent = todayCount;
+      document.getElementById("statUpcoming").textContent = upcomingCount;
+      document.getElementById("todayCount").textContent =
+        `You have ${todayCount} appointments today`;
+    });
+}
+
+function acceptAppointment(id) {
+  db.collection("appointments").doc(id).update({
+    status: "accepted"
+  }).then(() => {
+    alert("✅ Appointment accepted");
+  });
+}
 </script>
 
 </body>
 </html>
+

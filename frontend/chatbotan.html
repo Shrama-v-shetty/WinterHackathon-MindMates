@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Anonymous Chat | CampusCare</title>
+  <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+
+<div class="chat-container">
+
+  <!-- Header -->
+  <div class="chat-header">
+    <div class="left">
+      ←
+      <div class="avatar">🕶️</div>
+      <div>
+        <h4>Anonymous Chat</h4>
+        <span class="online">● Online</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="security">
+    🔒 You are chatting anonymously. 
+  </div>
+
+  <!-- Messages -->
+  <div class="messages" id="messages"></div>
+
+  <!-- Input -->
+  <div class="chat-input">
+    <input type="text" id="input" placeholder="Type your message anonymously..." />
+    <button onclick="sendMessage()">➤</button>
+  </div>
+
+</div>
+
+<!-- ================= FIREBASE SDKs ================= -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+/* ================= FIREBASE CONFIG ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyDxo5Dr99KLGCdknQYiFb-Jz6t4x8HuttM",
+  authDomain: "mindmates-bbe64.firebaseapp.com",
+  projectId: "mindmates-bbe64",
+  storageBucket: "mindmates-bbe64.appspot.com",
+  messagingSenderId: "1016333193406",
+  appId: "1:1016333193406:web:a2071817d481df81ec4eef"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let sessionId = null;
+
+/* ================= ANONYMOUS LOGIN ================= */
+auth.signInAnonymously()
+  .then(result => {
+    sessionId = result.user.uid;
+    listenMessages();
+  })
+  .catch(err => {
+    alert("Anonymous login failed");
+    console.error(err);
+  });
+
+/* ================= SEND MESSAGE ================= */
+function sendMessage() {
+  const input = document.getElementById("input");
+  const text = input.value.trim();
+
+  if (!text || !sessionId) return;
+
+  db.collection("anonymousChats")
+    .doc(sessionId)
+    .collection("messages")
+    .add({
+      text: text,
+      sender: "anonymous",
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+  input.value = "";
+}
+
+/* ================= LISTEN MESSAGES ================= */
+function listenMessages() {
+  db.collection("anonymousChats")
+    .doc(sessionId)
+    .collection("messages")
+    .orderBy("timestamp")
+    .onSnapshot(snapshot => {
+      const messagesDiv = document.getElementById("messages");
+      messagesDiv.innerHTML = "";
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const msg = document.createElement("div");
+
+        msg.className = "message sent";
+
+        msg.innerHTML = `
+          ${data.text}
+          <span class="time">Now</span>
+        `;
+
+        messagesDiv.appendChild(msg);
+      });
+
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+}
+</script>
+
+</body>
+</html>

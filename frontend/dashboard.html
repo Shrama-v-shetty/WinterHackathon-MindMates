@@ -1,150 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>CampusCare Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css">
+  <meta charset="UTF-8">
+  <title>CampusCare Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
+
 <body>
 
 <!-- Navbar -->
 <header class="navbar">
-    <div class="logo"><img src="img3.png" alt="MindMates Logo" class="brand-icon">
-                <span class="brand-name">MindMates</span></div>
-    
+  <div class="logo">
+    <img src="img3.png" class="brand-icon">
+    <span class="brand-name">MindMates</span>
+  </div>
 </header>
 
-<!-- Welcome Section -->
+<!-- Welcome -->
 <section class="welcome">
-    <h2>Welcome back!</h2>
-    <p>How can we support you today?</p>
+  <h2>Welcome back!</h2>
+  <p>How can we support you today?</p>
 </section>
 
 <!-- Quick Actions -->
 <section class="actions">
-    <div class="action-card blue" onclick="openModal()">
+  <div class="action-card blue" onclick="openModal()">📅
+    <h4>Book Appointment</h4>
+    <p>Schedule a session</p>
+  </div>
 
-        📅
-        <h4>Book Appointment</h4>
-        <p>Schedule a session</p>
-      
+  <div class="action-card green" onclick="openChat()">💬
+    <h4>Chat Now</h4>
+    <p>Message a counselor</p>
+  </div>
 
-    </div>
+  <div class="action-card purple" onclick="openVideo()">🎥
+    <h4>Video Call</h4>
+    <p>Face-to-face session</p>
+  </div>
 
-    <div class="action-card green" onclick="openChat()">
-
-        💬
-        <h4>Chat Now</h4>
-        <p>Message a counselor</p>
-    </div>
-
-    <div class="action-card purple" onclick="openVideo()">
-        🎥
-        <h4>Video Call</h4>
-        <p>Face-to-face session</p>
-    </div>
-
-    <div class="action-card violet" onclick="openChatbot()">
-        🧠
-        <h4>AI Counselor</h4>
-        <p>24/7 AI assistance</p>
-    </div>
+  <div class="action-card violet" onclick="openChatbot()">🧠
+    <h4>AI Counselor</h4>
+    <p>24/7 AI assistance</p>
+  </div>
 </section>
 
 <!-- Upcoming Appointments -->
 <section class="card">
-    <h3>Upcoming Appointments</h3>
-
-    <div class="appointment">
-        <div>
-            <strong>Dr. Sarah Johnson</strong>
-            <p>📅 Jan 10, 2026 at 2:00 PM</p>
-        </div>
-        <button class="btn blue">Video Call</button>
-    </div>
+  <h3>Upcoming Appointments</h3>
+  <div id="studentAppointments"></div>
 </section>
 
-<!-- Available Counselors -->
-
-
-<!-- Emergency Help -->
+<!-- Emergency -->
 <section class="emergency">
-    <h3>🚨 Emergency Help</h3>
-    <p class="space">If you're in crisis, we're here 24/7</p>
-    <div class="space2">
-    <button class="btn dark" onclick="openHospital()">Nearby Hospitals</button></div>
+  <h3>🚨 Emergency Help</h3>
+  <p>If you're in crisis, we're here 24/7</p>
+  <button class="btn dark" onclick="openHospital()">Nearby Hospitals</button>
 </section>
 
-
-<!-- Book Appointment Modal -->
+<!-- Appointment Modal -->
 <div id="appointmentModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Book Appointment</h3>
-            <span class="close" onclick="closeModal()">×</span>
-        </div>
-
-        <div class="modal-body">
-          
-              <label>Select Date</label>
-            <input type="date">
-
-            <label>Select Time</label>
-            <select>
-                <option>9:00 AM</option>
-                <option>10:00 AM</option>
-                <option>11:00 AM</option>
-            </select>
-
-            <label>Session Type</label>
-            <div class="session-type">
-                <button class="session active">Video Call</button>
-                <button class="session" >Chat</button>
-            </div>
-
-            <button class="confirm-btn" onclick="AlertConfirm()">Confirm Booking</button>
-        </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Book Appointment</h3>
+      <span class="close" onclick="closeModal()">×</span>
     </div>
+
+    <div class="modal-body">
+      <label>Select Date</label>
+      <input type="date" id="apptDate">
+
+      <label>Select Time</label>
+      <select id="apptTime">
+        <option value="">Select Time</option>
+        <option>9:00 AM</option>
+        <option>10:00 AM</option>
+        <option>11:00 AM</option>
+      </select>
+
+      <label>Session Type</label>
+      <div class="session-type">
+        <button class="session active">Video Call</button>
+        <button class="session">Chat</button>
+      </div>
+
+      <button class="confirm-btn" onclick="AlertConfirm()">Confirm Booking</button>
+    </div>
+  </div>
 </div>
 
+<!-- =================== SCRIPT =================== -->
+<script>
+/* 🔥 Firebase Config */
+const firebaseConfig = {
+   apiKey: "AIzaSyC8C6ncKCm4cH0yhMZaPHzzS5GfbDZvp84",
+  authDomain: "mindmates-286b9.firebaseapp.com",
+  projectId: "mindmates-286b9",
+};
 
-<script>// Placeholder for future interactions
-console.log("CampusCare Dashboard Loaded");
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+/* Modal */
 function openModal() {
-    document.getElementById("appointmentModal").style.display = "flex";
+  document.getElementById("appointmentModal").style.display = "flex";
 }
-
 function closeModal() {
-    document.getElementById("appointmentModal").style.display = "none";
+  document.getElementById("appointmentModal").style.display = "none";
 }
 
-// Session toggle
-document.addEventListener("click", function (e) {
-    if (e.target.classList.contains("session")) {
-        document.querySelectorAll(".session").forEach(btn => {
-            btn.classList.remove("active");
-        });
-        e.target.classList.add("active");
-    }
+/* Session toggle */
+document.addEventListener("click", e => {
+  if (e.target.classList.contains("session")) {
+    document.querySelectorAll(".session").forEach(b => b.classList.remove("active"));
+    e.target.classList.add("active");
+  }
 });
 
-function openChat() {
-    window.location.href = "chat.html";
+/* Navigation */
+function openChat(){ window.location.href="chat.html"; }
+function openVideo(){ window.location.href="video.html"; }
+function openChatbot(){ window.location.href="chatbot.html"; }
+function openHospital(){
+  window.open("https://www.google.com/maps/search/hospitals+near+me/", "_blank");
 }
-function openVideo(){
-    window.location.href = "video.html";
+
+/* 🔥 Confirm Booking */
+function AlertConfirm() {
+  const user = auth.currentUser;
+  if (!user) return alert("Please login again");
+
+  const date = document.getElementById("apptDate").value;
+  const time = document.getElementById("apptTime").value;
+  const mode = document.querySelector(".session.active").textContent;
+
+  if (!date || !time) return alert("Select date & time");
+
+  db.collection("appointments").add({
+    studentId: user.uid,
+    studentName: user.isAnonymous ? "Anonymous" : user.email,
+    counsellorId: "COUNSELLOR_001",
+    counsellorName: "Dr. Sarah Johnson",
+    date: firebase.firestore.Timestamp.fromDate(new Date(date)),
+    time: time,
+    mode: mode,
+    status: "upcoming",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(() => {
+    alert("✅ Appointment Booked!");
+    closeModal();
+  })
+  .catch(err => alert(err.message));
 }
-function openChatbot(){
-      window.location.href = "chatbot.html";
-}
-function AlertConfirm(){
-    alert("✅ Appointment booking request has been sent successfully!");
-}
-function openHospital() {
-    // Opens Google Maps with nearby hospitals
-    const mapsUrl = "https://www.google.com/maps/search/hospitals+near+me/";
-    window.open(mapsUrl, "_blank"); // open in new tab
-}
+
+/* 🔥 Load Upcoming Appointments */
+auth.onAuthStateChanged(user => {
+  if (!user) return;
+
+  const container = document.getElementById("studentAppointments");
+
+  db.collection("appointments")
+    .where("studentId", "==", user.uid)
+    .where("status", "==", "upcoming")
+    .orderBy("date")
+    .onSnapshot(snapshot => {
+      container.innerHTML = "";
+
+      if (snapshot.empty) {
+        container.innerHTML = "<p>No upcoming appointments</p>";
+        return;
+      }
+
+      snapshot.forEach(doc => {
+        const a = doc.data();
+        container.innerHTML += `
+          <div class="appointment">
+            <strong>${a.counsellorName}</strong>
+            <p>📅 ${a.date.toDate().toDateString()} | ${a.time}</p>
+            <span>${a.mode}</span>
+          </div>
+        `;
+      });
+    });
+});
 </script>
+
 </body>
 </html>
+
