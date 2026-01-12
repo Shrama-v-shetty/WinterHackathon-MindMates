@@ -65,60 +65,14 @@
 </section>
 
 <!-- Available Counselors -->
-<section class="card">
-    <h3>Available Counselors</h3>
 
-    <div class="counselor online">
-        <div>
-            <strong>Dr. Sarah Johnson</strong>
-            <p>Academic Stress</p>
-        </div>
-        <div class="buttons">
-            <button class="btn blue" onclick="openModal()">Book</button>
-            <button class="btn green" onclick="openChat()">Chat</button>
-        </div>
-    </div>
-
-    <div class="counselor online">
-        <div>
-            <strong>Dr. Michael Chen</strong>
-            <p>Anxiety & Depression</p>
-        </div>
-        <div class="buttons">
-            <button class="btn blue" onclick="openModal()">Book</button>
-            <button class="btn green" onclick="openChat()">Chat</button>
-        </div>
-    </div>
-
-    <div class="counselor offline">
-        <div>
-            <strong>Dr. Emily Brown</strong>
-            <p>Relationship Issues</p>
-        </div>
-        <div class="buttons">
-            <button class="btn blue" onclick="openModal()">Book</button>
-            <button class="btn green" onclick="openChat()">Chat</button>
-        </div>
-    </div>
-
-    <div class="counselor online">
-        <div>
-            <strong>Dr. James Wilson</strong>
-            <p>Career Counselling</p>
-        </div>
-        <div class="buttons">
-            <button class="btn blue" onclick="openModal()">Book</button>
-            <button class="btn green" onclick="openChat()">Chat</button>
-        </div>
-    </div>
-</section>
 
 <!-- Emergency Help -->
 <section class="emergency">
     <h3>🚨 Emergency Help</h3>
     <p class="space">If you're in crisis, we're here 24/7</p>
     <div class="space2">
-    <button class="btn dark">Nearby Hospitals</button></div>
+    <button class="btn dark" onclick="openHospital()">Nearby Hospitals</button></div>
 </section>
 
 
@@ -191,6 +145,11 @@ function openChatbot(){
 }
 function AlertConfirm(){
     alert("✅ Appointment booking request has been sent successfully!");
+}
+function openHospital() {
+    // Opens Google Maps with nearby hospitals
+    const mapsUrl = "https://www.google.com/maps/search/hospitals+near+me/";
+    window.open(mapsUrl, "_blank"); // open in new tab
 }
 </script>
 </body>

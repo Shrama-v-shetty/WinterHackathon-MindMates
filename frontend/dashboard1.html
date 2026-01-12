@@ -53,7 +53,7 @@
             <span>11:30 AM</span>
           </div>
           <div class="actions">
-            <button class="btn purple">Video Call</button>
+           <button class="btn purple" onclick="startVideoCall()">Video Call</button>
             <button class="btn purple" onclick="openChat()">Chat</button>
             <button class="btn icon" onclick="openNote()">📄</button>
           </div>
@@ -175,6 +175,34 @@ function rescheduleAppointment(button) {
     button.style.background = "#f59e0b";
     button.style.cursor = "default";
 }
+// Assuming Firebase Auth & Firestore are initialized
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+function startVideoCall() {
+  const user = auth.currentUser; // Logged-in counselor
+  if (!user) {
+    alert("Please log in first.");
+    return;
+  }
+
+  // Fetch the Meet link from Firestore
+  db.collection("users").doc(user.uid).get()
+    .then(doc => {
+      if (doc.exists) {
+        const meetLink = doc.data().meetLink;
+        if (meetLink) {
+          window.open(meetLink, "_blank"); // Open in new tab
+        } else {
+          alert("No Google Meet link found. Please set it in your profile.");
+        }
+      } else {
+        alert("User data not found.");
+      }
+    })
+    .catch(error => console.error(error));
+}
+
 
 
 </script>

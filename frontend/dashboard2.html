@@ -73,8 +73,11 @@ function callEmergency() {
 }
 
 function openHospitals() {
-    alert("Showing nearby hospitals...");
+    // Opens Google Maps with nearby hospitals
+    const mapsUrl = "https://www.google.com/maps/search/hospitals+near+me/";
+    window.open(mapsUrl, "_blank"); // open in new tab
 }
+
 </script>
 
 </body>
