@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MindMates | Login</title>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="bg">
+    <div class="container">
+
+        <!-- Header with image logo -->
+        <div class="header">
+            <div class="brand">
+                <img src="img3.png" alt="MindMates Logo" class="brand-icon">
+                <span class="brand-name">MindMates</span>
+            </div>
+            <p>Your Trusted Companion for Campus Wellbeing</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="card">
+            <h2>Welcome Back</h2>
+
+            <!-- Role Selection -->
+            <div class="role-selection">
+                <button class="role active" onclick="selectRole(this)">Student</button>
+                <button class="role" onclick="selectRole(this)">Teacher</button>
+                <button class="role" onclick="selectRole(this)">Counselor</button>
+            </div>
+
+            <!-- Email -->
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+
+            <!-- Password -->
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+
+            <!-- Login Button -->
+            <button class="login-btn" onclick="login()">Login</button>
+
+            <div class="divider">or</div>
+
+            <!-- Anonymous Button -->
+            <button class="anonymous-btn" onclick="goAnonymous()">Continue Anonymously</button>
+
+            <!-- Sign Up Option -->
+            <p class="signup-text">
+                Don't have an account? <a href="signup.html">Sign Up</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDxo5Dr99KLGCdknQYiFb-Jz6t4x8HuttM",
+  authDomain: "mindmates-bbe64.firebaseapp.com",
+  projectId: "mindmates-bbe64",
+  storageBucket: "mindmates-bbe64.firebasestorage.app",
+  messagingSenderId: "1016333193406",
+  appId: "1:1016333193406:web:a2071817d481df81ec4eef"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let selectedRole = "Student";
+
+function selectRole(button) {
+    document.querySelectorAll(".role").forEach(btn => btn.classList.remove("active"));
+    button.classList.add("active");
+    selectedRole = button.innerText;
+}
+
+function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    auth.signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            const uid = userCredential.user.uid;
+
+            let collection = "";
+            if (selectedRole === "Student") collection = "students";
+            if (selectedRole === "Teacher") collection = "teachers";
+            if (selectedRole === "Counselor") collection = "counsellors";
+
+            db.collection(collection).doc(uid).get()
+                .then(doc => {
+                    if (!doc.exists) {
+                        alert("No data found for this role");
+                        return;
+                    }
+                    alert("Login successful!");
+                    window.location.href = "dashboard.html";
+                });
+        })
+        .catch(err => alert(err.message));
+}
+
+function goAnonymous() {
+    auth.signInAnonymously()
+        .then(() => {
+            alert("Anonymous access granted");
+            window.location.href = "chat.html";
+        })
+        .catch(err => alert(err.message));
+}
+</script>
+
+</body>
+</html>
