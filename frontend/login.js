@@ -4,7 +4,8 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInAnonymously,
-  updateProfile
+  updateProfile,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -19,6 +20,27 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+//
+// 🔹 ROLE HANDLING
+//
+let selectedRole = "Student";
+const roleButtons = document.querySelectorAll(".role");
+roleButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    roleButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedRole = btn.innerText;
+  });
+});
+
+function redirectByRole() {
+  if (selectedRole === "Counselor") {
+    window.location.href = "dashboard1.html";
+  } else {
+    window.location.href = "dashboard.html";
+  }
+}
+
 // LOGIN
 const loginBtn = document.getElementById("loginBtn");
 if (loginBtn) {
@@ -27,9 +49,13 @@ if (loginBtn) {
     const password = document.getElementById("password").value;
 
     try {
+      // If currently signed in as anonymous, log them out first
+      if (auth.currentUser && auth.currentUser.isAnonymous) {
+        await signOut(auth);
+      }
+
       await signInWithEmailAndPassword(auth, email, password);
-      alert("Login successful");
-      window.location.href = "dashboard.html";
+      redirectByRole(); // role-based dashboard
     } catch (err) {
       alert(err.message);
     }
@@ -51,17 +77,23 @@ if (signupBtn) {
     }
 
     try {
+      // If currently signed in as anonymous, log them out first
+      if (auth.currentUser && auth.currentUser.isAnonymous) {
+        await signOut(auth);
+        alert("You were logged out of anonymous mode. Now please signup again.");
+        return;
+      }
+
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCred.user, { displayName: name });
-      alert("Signup successful");
-      window.location.href = "dashboard.html";
+      redirectByRole(); // role-based dashboard
     } catch (err) {
       alert(err.message);
     }
   });
 }
 
-// ANONYMOUS
+// ANONYMOUS (unchanged)
 const anonBtn = document.getElementById("anonBtn");
 if (anonBtn) {
   anonBtn.addEventListener("click", async () => {
