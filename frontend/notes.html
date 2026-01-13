@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <title>Counselling Notes</title>
   <link rel="stylesheet" href="notes.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -26,28 +28,31 @@
 
       <div class="form-group">
         <label>Session Date</label>
-        <input type="date" value="2026-01-08">
+        <input type="date" id="sessionDate">
       </div>
 
       <div class="form-group">
         <label>Student / Patient ID</label>
-        <input type="text" placeholder="Anonymous or Patient ID">
+        <input type="text" id="studentId" placeholder="Anonymous or Patient ID">
       </div>
 
       <div class="form-group">
         <label>Session Notes</label>
-        <textarea rows="6" placeholder="Write your confidential notes here..."></textarea>
+        <textarea id="noteContent" rows="6" placeholder="Write your confidential notes here..."></textarea>
       </div>
 
       <div class="form-group">
         <label>Recommendations</label>
-        <textarea rows="4" placeholder="Suggested actions, resources, or follow-up plans..."></textarea>
+        <textarea id="recommendations" rows="4" placeholder="Suggested actions, resources, or follow-up plans..."></textarea>
       </div>
+
+      <h3>Previous Notes</h3>
+      <div id="previousNotes"></div>
     </div>
 
     <!-- Footer -->
     <div class="modal-footer">
-      <button class="btn primary" onclick="AlertSave()">Save Notes</button>
+      <button class="btn primary" onclick="saveNotes()">Save Notes</button>
       <button class="btn secondary" onclick="closeModal()">Cancel</button>
     </div>
 
@@ -55,14 +60,86 @@
 </div>
 
 <script>
-/* Auto open modal when page loads */
+/* Auto open modal */
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("notesModal").style.display = "flex";
 });
 
+// Get appointmentId from URL
+const urlParams = new URLSearchParams(window.location.search);
+const appointmentId = urlParams.get('appointmentId');
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyC8C6ncKCm4cH0yhMZaPHzzS5GfbDZvp84",
+  authDomain: "mindmates-286b9.firebaseapp.com",
+  projectId: "mindmates-286b9",
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// Close modal
 function closeModal() {
    window.location.href = "dashboard1.html";
 }
+
+// Save notes to Firestore
+function saveNotes() {
+  const sessionDate = document.getElementById("sessionDate").value;
+  const studentId = document.getElementById("studentId").value.trim();
+  const noteContent = document.getElementById("noteContent").value.trim();
+  const recommendations = document.getElementById("recommendations").value.trim();
+
+  if (!noteContent) return alert("Please write something in notes");
+
+  db.collection("notes").add({
+    appointmentId: appointmentId,
+    studentId: studentId || "Anonymous",
+    sessionDate: sessionDate ? new Date(sessionDate) : new Date(),
+    noteContent: noteContent,
+    recommendations: recommendations,
+    createdAt: firebase.firestore.Timestamp.now()
+  })
+  .then(() => {
+    alert("✅ Notes successfully saved");
+    document.getElementById("noteContent").value = "";
+    document.getElementById("recommendations").value = "";
+    loadPreviousNotes(); // refresh list
+  })
+  .catch(err => {
+    console.error(err);
+    alert("❌ Error saving notes");
+  });
+}
+
+// Load previous notes
+function loadPreviousNotes() {
+  const previousNotesDiv = document.getElementById("previousNotes");
+  previousNotesDiv.innerHTML = "";
+
+  db.collection("notes")
+    .where("appointmentId", "==", appointmentId)
+    .orderBy("createdAt", "desc")
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        const note = doc.data();
+        const div = document.createElement("div");
+        div.className = "note-card";
+        div.innerHTML = `
+          <strong>${note.sessionDate?.toDate ? note.sessionDate.toDate().toDateString() : new Date(note.sessionDate).toDateString()}</strong>
+          <p><em>Student ID:</em> ${note.studentId}</p>
+          <p>${note.noteContent}</p>
+          <p><strong>Recommendations:</strong> ${note.recommendations}</p>
+          <hr>
+        `;
+        previousNotesDiv.appendChild(div);
+      });
+    });
+}
+
+// Initial load
+loadPreviousNotes();
 
 /* Close modal when clicking outside */
 window.addEventListener("click", function (e) {
@@ -71,10 +148,8 @@ window.addEventListener("click", function (e) {
     closeModal();
   }
 });
-function AlertSave(){
-    alert("Notes is successfully saved")
-}
 </script>
 
 </body>
 </html>
+

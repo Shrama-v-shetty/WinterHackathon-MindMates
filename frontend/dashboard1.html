@@ -107,7 +107,7 @@ function toggleStatus() {
 }
 
 function logout() {
-  auth.signOut().then(() => window.location.href = "login.html");
+  auth.signOut().then(() => window.location.href = "index.html");
 }
 
 function openChat() {
@@ -144,9 +144,17 @@ function loadAppointments() {
 
       snapshot.forEach(doc => {
         const a = doc.data();
-        const d = a.date.toDate();
+
+        // SAFELY convert date
+        let d;
+        if (a.date?.toDate) {
+          d = a.date.toDate();
+        } else {
+          d = new Date(a.date);
+        }
         d.setHours(0,0,0,0);
 
+        // Buttons for actions
         const html = `
           <div class="appointment">
             <div>
@@ -154,16 +162,19 @@ function loadAppointments() {
               <span>${a.time}</span>
             </div>
             <div class="actions">
-              ${a.status === "upcoming" ? `
-                <button class="btn green" onclick="acceptAppointment('${doc.id}')">Accept</button>
-              ` : `
-                <button class="btn purple" onclick="openChat()">Chat</button>
-              `}
+              <button class="btn gray" title="Add Note" onclick="openNote('${doc.id}')">📝</button>
+              <button class="btn purple" title="Chat" onclick="openChat('${doc.id}')">💬</button>
+              <button class="btn blue" title="Video Call" onclick="startVideo('${doc.id}')">📹</button>
             </div>
           </div>
         `;
 
-        if (d.getTime() === today.getTime()) {
+        // Append to today or upcoming
+        if (
+          d.getFullYear() === today.getFullYear() &&
+          d.getMonth() === today.getMonth() &&
+          d.getDate() === today.getDate()
+        ) {
           todayBox.innerHTML += html;
           todayCount++;
         } else if (d > today) {
@@ -172,6 +183,7 @@ function loadAppointments() {
         }
       });
 
+      // Update stats
       document.getElementById("statToday").textContent = todayCount;
       document.getElementById("statUpcoming").textContent = upcomingCount;
       document.getElementById("todayCount").textContent =
@@ -186,6 +198,22 @@ function acceptAppointment(id) {
     alert("✅ Appointment accepted");
   });
 }
+function openNote(appointmentId) {
+  // Redirect to note.html with appointmentId as query param
+  window.location.href = `notes.html?appointmentId=${appointmentId}`;
+}
+
+function openChat(appointmentId) {
+  // Redirect to chat.html with appointmentId as query param
+  window.location.href = "counsellor_chat.html"
+}
+
+function startVideo(appointmentId) {
+  // Redirect to video call page or integrate SDK
+ 
+    window.open("https://meet.google.com/new", "_blank");
+}
+
 </script>
 
 </body>

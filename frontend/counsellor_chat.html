@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Counsellor Chat | CampusCare</title>
+  <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+
+<div class="chat-container">
+
+  <div class="chat-header">
+    <div class="left">
+      ←
+      <div class="avatar">👤</div>
+      <div>
+        <h4>Student</h4>
+        <span class="online">● Online</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="security">
+    🔒 This conversation is confidential and encrypted
+  </div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="chat-input">
+    <input type="text" id="input" placeholder="Reply to student..." />
+    <button onclick="sendMessage()">➤</button>
+  </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* 🔥 Firebase Config */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* 🔑 IDs */
+const counsellorId = localStorage.getItem("uid");
+const studentId = localStorage.getItem("studentId");
+const chatId = `${studentId}_${counsellorId}`;
+
+const messagesDiv = document.getElementById("messages");
+const input = document.getElementById("input");
+
+/* ➤ Send Message */
+window.sendMessage = async () => {
+  const text = input.value.trim();
+  if (!text) return;
+
+  await addDoc(collection(db, "chats", chatId, "messages"), {
+    senderId: counsellorId,
+    senderRole: "counsellor",
+    text,
+    timestamp: serverTimestamp()
+  });
+
+  input.value = "";
+};
+
+/* 🔁 Receive Messages */
+const q = query(
+  collection(db, "chats", chatId, "messages"),
+  orderBy("timestamp")
+);
+
+onSnapshot(q, (snapshot) => {
+  messagesDiv.innerHTML = "";
+
+  snapshot.forEach((doc) => {
+    const msg = doc.data();
+    const div = document.createElement("div");
+
+    div.className =
+      msg.senderRole === "counsellor"
+        ? "message sent"
+        : "message received";
+
+    div.innerHTML = `
+      ${msg.text}
+      <span class="time">
+        ${msg.timestamp ? msg.timestamp.toDate().toLocaleTimeString() : ""}
+      </span>
+    `;
+
+    messagesDiv.appendChild(div);
+  });
+
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+});
+</script>
+
+</body>
+</html>
+
