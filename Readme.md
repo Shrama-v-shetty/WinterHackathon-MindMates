@@ -4,8 +4,7 @@
 The College Counselling & Mental Health Support Portal is a web-based application designed to provide students and teachers with easy, secure, and accessible counselling services within a college environment.
 The platform allows users to book counselling appointments, communicate with counsellors through chat or video calls, and receive mental health support anonymously. An AI-powered chatbot is integrated to provide 24/7 assistance when counsellors are unavailable, and emergency support is enhanced using hospital location mapping.
 This project aims to reduce barriers to mental health support and promote student well-being.
-# Demo Video Link: <insert Google Drive link to the demo video of the working of your project>
-
+# Demo Video Link: https://drive.google.com/drive/folders/1VLmVsQOoRuDDSk9K9PU4V8cz65Arxqjk?usp=sharing
 ## Features
 - Role-based login for students, teachers, and counsellors (with anonymous access option)
 - Counsellor schedule viewing and appointment booking system
